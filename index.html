@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hazard-Reasoner</title>
+  <meta name="description" content="Hazard-Reasoner: severity-aware traffic hazard perception with vision-language models, safety-aware GRPO, and the DRAMA-Reasoning dataset.">
+  <meta property="og:title" content="Hazard-Reasoner">
+  <meta property="og:description" content="Structured, safety-aware hazard perception for driver-assistance warnings. 12,522 annotated driving scenes, 12 hazard classes, 4 severity levels.">
+  <meta property="og:image" content="static/images/framework.png">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M16 2 3 7v8c0 8 5.6 13.4 13 15 7.4-1.6 13-7 13-15V7z' fill='%230b2545'/><path d='m10 16 4 4 8-9' stroke='%23fff' stroke-width='3' fill='none'/></svg>">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top">Hazard-Reasoner</a>
+    <div class="nav-links">
+      <a href="#abstract">Abstract</a>
+      <a href="#method">Method</a>
+      <a href="#dataset">Dataset</a>
+      <a href="#demo">Demo</a>
+      <a href="#results">Results</a>
+      <a href="#citation">Citation</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <!-- TODO: replace with the final paper title -->
+    <h1 class="title">Hazard-Reasoner: Severity-Aware Traffic Hazard Perception with Vision-Language Models and Safety-Aware Reinforcement Learning</h1>
+
+    <!-- TODO: authors, affiliations, venue -->
+    <p class="authors">
+      <span>Zixuan Xu<sup>1</sup></span>
+      <span>Author Two<sup>1</sup></span>
+      <span>Author Three<sup>1</sup></span>
+      <span>Author Four<sup>1</sup></span>
+    </p>
+    <p class="affil"><sup>1</sup>KAIST</p>
+    <p class="venue">Under review</p>
+
+    <div class="buttons">
+      <a class="btn" href="#" data-todo="paper"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z M14 2v6h6" /></svg>Paper</a>
+      <a class="btn" href="#" data-todo="arxiv"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z M8 9h8 M8 13h8 M8 17h5" /></svg>arXiv</a>
+      <a class="btn" href="#" data-todo="code"><svg viewBox="0 0 24 24"><path d="m8 7-5 5 5 5 M16 7l5 5-5 5" /></svg>Code</a>
+      <a class="btn btn-primary" href="#dataset"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5 M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3" /></svg>Dataset</a>
+      <a class="btn" href="#" data-todo="model"><svg viewBox="0 0 24 24"><path d="M12 2 3 7v10l9 5 9-5V7z M3 7l9 5 9-5 M12 12v10" /></svg>Model</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============================== TEASER ============================== -->
+<section class="teaser">
+  <div class="wrap teaser-grid">
+    <div class="teaser-player" id="teaser-player"></div>
+    <div class="teaser-text">
+      <p class="tldr"><b>TL;DR</b> Driver warnings need more than a scene description: the model has to find the hazard that matters <em>and</em> judge how urgent it is. Hazard-Reasoner trains Qwen3-VL-8B on <b>DRAMA-Reasoning</b>, a new 12,522-scene dataset with hazard types, severity levels and reasoning rationales, then refines it with GRPO rewards that penalize <b>under-warning</b> more than over-warning.</p>
+      <div class="kpis">
+        <div class="kpi"><span class="kpi-val">90.33<small>%</small></span><span class="kpi-lbl">hazard accuracy</span></div>
+        <div class="kpi"><span class="kpi-val">3.13<small>%</small></span><span class="kpi-lbl">false-negative rate</span></div>
+        <div class="kpi"><span class="kpi-val">41→72<small>%</small></span><span class="kpi-lbl">HIGH-severity recall (SFT → +GRPO)</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== ABSTRACT ============================== -->
+<section id="abstract">
+  <div class="wrap narrow">
+    <h2>Abstract</h2>
+    <p class="abstract">Timely perception of traffic hazards is an important prerequisite for effective driver-assistance warnings, especially in situations where the safety relevance of a road user or object depends on scene context and urgency. Although recent vision-language models (VLMs) can describe complex driving scenes, their outputs are not necessarily calibrated to the operational severity of hazards. Standard supervised fine-tuning also optimizes token-level imitation rather than the asymmetric safety consequences of missed or under-prioritized hazards. To address these limitations, this study proposes <b>Hazard-Reasoner</b>, a VLM framework for structured and safety-oriented hazard perception in driving scenes. The framework builds on <b>DRAMA-Reasoning</b>, an augmented DRAMA-based dataset with a 12-class hazard taxonomy, a four-level contextual severity scale, and structured reasoning rationales calibrated with input from transportation-safety experts. Qwen3-VL-8B-Instruct is trained through a two-stage procedure: supervised fine-tuning establishes domain-specific hazard reasoning, while Group Relative Policy Optimization refines the model using safety-aware rewards that penalize severity underestimation more strongly than conservative overestimation. Hazard-Reasoner is evaluated on a held-out test set of 1,050 driving scenes using both conventional classification metrics and safety-oriented measures. The full model achieves 90.33% hazard accuracy, 91.24% weighted F1, and a 3.13% false-negative rate. Compared with the supervised fine-tuning baseline, reward refinement increases HIGH-severity recall from 41.25% to 72.50% and reduces severity underestimation from 53.75% to 25.00%. These findings demonstrate that structured hazard-reasoning data and safety-aware reward refinement can improve both hazard recognition and severity-sensitive warning calibration, supporting more operationally aligned VLM-based hazard perception for driver-assistance applications.</p>
+  </div>
+</section>
+
+<!-- ============================== METHOD ============================== -->
+<section id="method" class="alt">
+  <div class="wrap">
+    <h2>Method</h2>
+    <p class="lede">Four stages: build the dataset, define the task as structured output, train in two stages, then evaluate with both standard and safety-oriented metrics.</p>
+    <figure class="figure">
+      <img src="static/images/framework.png" alt="Hazard-Reasoner framework: dataset construction, task formulation, two-stage training with SFT and GRPO, and evaluation." loading="lazy">
+      <figcaption>Overview of the Hazard-Reasoner framework.</figcaption>
+    </figure>
+
+    <div class="cards3">
+      <div class="card">
+        <div class="card-step">Stage 1</div>
+        <h3>Structured hazard reasoning data</h3>
+        <p>DRAMA's ego-view clips and risk captions are rebuilt into a 12-class hazard taxonomy, a 4-level contextual severity scale, and a reasoning chain <code>Environment&nbsp;Perception → Hazard&nbsp;Reasoning → Driver&nbsp;Warning</code>, with LLM-assisted generation and expert verification.</p>
+      </div>
+      <div class="card">
+        <div class="card-step">Stage 2</div>
+        <h3>Supervised fine-tuning</h3>
+        <p>Qwen3-VL-8B-Instruct is LoRA-tuned on 10,084 four-frame samples (0.5&nbsp;s apart) to learn the output format, the hazard vocabulary, and how visual evidence maps to each hazard class.</p>
+      </div>
+      <div class="card">
+        <div class="card-step">Stage 3</div>
+        <h3>Safety-aware GRPO</h3>
+        <p>Group Relative Policy Optimization with three rewards: a <b>detection</b> reward weighted by class criticality, an <b>asymmetric severity</b> reward (only counted when the hazard type is correct) that penalizes under-rating more than over-rating, and a <b>format</b> reward.</p>
+      </div>
+    </div>
+
+    <figure class="figure">
+      <img src="static/images/task_formulation.png" alt="Prompt design with system message, task description, hazard taxonomy, severity rules and output schema, next to a 4-frame input and its ground-truth label." loading="lazy">
+      <figcaption>Task formulation: the model reads four sequential front-camera frames and outputs a reasoning trace plus a structured answer (hazard type, severity level, short driver warning). The example frames are illustrative.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================== DATASET ============================== -->
+<section id="dataset">
+  <div class="wrap">
+    <h2>DRAMA-Reasoning Dataset</h2>
+    <p class="lede">An augmented version of <a href="https://usa.honda-ri.com/drama" target="_blank" rel="noopener">DRAMA</a> (Malla et al., WACV 2023) for <b>warning-oriented</b> hazard perception. Each sample pairs four sequential ego-view frames with a hazard type, a contextual severity level, a short driver warning, and a two-part reasoning rationale.</p>
+
+    <div class="stats-row">
+      <div class="stat"><span>12,522</span>annotated scenes</div>
+      <div class="stat"><span>12</span>hazard classes</div>
+      <div class="stat"><span>4</span>severity levels</div>
+      <div class="stat"><span>4 frames</span>0.5&nbsp;s apart</div>
+      <div class="stat"><span>κ = 0.82</span>expert agreement on hazard type</div>
+    </div>
+
+    <div class="ds-grid">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Hazard type × severity</h3>
+          <div class="legend" id="sev-legend"></div>
+        </div>
+        <div id="dist-chart" class="dist-chart" role="img" aria-label="Number of samples per hazard type, split by severity level"></div>
+        <p class="note">Splits: <b id="split-train"></b> train · <b id="split-val"></b> validation · <b id="split-test"></b> test. The class distribution is long-tailed, mirroring naturalistic driving.</p>
+      </div>
+      <div class="panel">
+        <h3>Taxonomy</h3>
+        <table class="tax">
+          <tr><th>Category</th><th>Hazard types</th></tr>
+          <tr><td>Vulnerable road users</td><td><code>crossing_pedestrian</code> <code>roadside_pedestrian</code> <code>cyclist</code> <code>motorcyclist</code></td></tr>
+          <tr><td>Vehicle-related</td><td><code>deceleration_vehicle</code> <code>making_turn_vehicle</code> <code>lane_change_merge</code> <code>oncoming_vehicle</code> <code>stopped_vehicle</code> <code>parked_vehicle</code></td></tr>
+          <tr><td>Infrastructure</td><td><code>road_construction</code></td></tr>
+          <tr><td>Baseline</td><td><code>no_hazard</code></td></tr>
+        </table>
+        <h3 class="mt">Severity</h3>
+        <ul class="sev-list">
+          <li><span class="sev sev-HIGH">HIGH</span>immediate action needed</li>
+          <li><span class="sev sev-MEDIUM">MEDIUM</span>prepare to respond</li>
+          <li><span class="sev sev-LOW">LOW</span>monitor</li>
+          <li><span class="sev sev-NONE">NONE</span>only paired with <code>no_hazard</code></li>
+        </ul>
+        <p class="note">Severity comes from a contextual score (base criticality, heavy-vehicle surcharge, infrastructure protection, traffic density) mapped to discrete bands.</p>
+      </div>
+    </div>
+
+    <h3 class="sub">Browse samples</h3>
+    <div class="chips" id="sample-chips"></div>
+    <div class="sample-view" id="sample-view"></div>
+
+    <h3 class="sub" id="download">Download</h3>
+    <div class="dl-grid">
+      <div class="panel">
+        <table class="files">
+          <tr><th>File</th><th>Samples</th><th>Size</th><th></th></tr>
+          <tr><td><code>drama_reasoning_train.jsonl</code></td><td>10,084</td><td>13 MB</td><td><a href="dataset/drama_reasoning_train.jsonl" download>Download</a></td></tr>
+          <tr><td><code>drama_reasoning_val.jsonl</code></td><td>1,388</td><td>1.8 MB</td><td><a href="dataset/drama_reasoning_val.jsonl" download>Download</a></td></tr>
+          <tr><td><code>drama_reasoning_test.jsonl</code></td><td>1,050</td><td>1.3 MB</td><td><a href="dataset/drama_reasoning_test.jsonl" download>Download</a></td></tr>
+          <tr><td><code>prompt.txt</code></td><td>-</td><td>1 KB</td><td><a href="dataset/prompt.txt" download>Download</a></td></tr>
+        </table>
+        <div class="callout">
+          <b>Images are not included.</b> The release contains annotations only. The video frames belong to DRAMA, which is distributed by Honda Research Institute under its own research license. Request access at <a href="https://usa.honda-ri.com/drama" target="_blank" rel="noopener">usa.honda-ri.com/drama</a>, then use each record's <code>source</code> field to find the clip. See <a href="dataset/README.md">dataset/README.md</a> for details.
+        </div>
+      </div>
+      <div class="panel">
+        <div class="code-head">One record</div>
+<pre class="code"><code>{
+  "id": "test_00001",
+  "split": "test",
+  "clip_key": "2020-0210-101957_009831_movie",
+  "source": {"subset": "drama",
+             "scenario": "2020-0210-101957",
+             "frame": "009831"},
+  "frames": ["..._t-3.jpg", "..._t-2.jpg",
+             "..._t-1.jpg", "..._t.jpg"],
+  "hazard_type": "crossing_pedestrian",
+  "severity_level": "LOW",
+  "warning_content": "Yield to the pedestrian",
+  "environment_perception": "An urban two-way street ...",
+  "hazard_reasoning": "There is a pedestrian ..."
+}</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== DEMO ============================== -->
+<section id="demo" class="alt">
+  <div class="wrap">
+    <h2>Qualitative Comparison</h2>
+    <p class="lede">36 test scenes, with outputs from zero-shot <span class="m m-qwen">Qwen3-VL-8B</span>, the <span class="m m-sft">SFT</span> baseline, and <span class="m m-hr">Hazard-Reasoner</span> (SFT&nbsp;+&nbsp;GRPO). The <b>Failure cases</b> tab shows where our model still gets it wrong.</p>
+    <div class="tabs" id="case-tabs" role="tablist"></div>
+    <p class="case-desc" id="case-desc"></p>
+    <div class="thumbs" id="demo-thumbs"></div>
+    <div class="demo-main">
+      <div class="demo-left">
+        <div id="demo-player"></div>
+        <div class="gt-card" id="demo-gt"></div>
+      </div>
+      <div class="demo-right" id="demo-models"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== RESULTS ============================== -->
+<section id="results">
+  <div class="wrap">
+    <h2>Results</h2>
+    <p class="lede">Held-out test set, n&nbsp;=&nbsp;1,050. <b>FNR</b> is the false-negative rate (a real hazard predicted as <code>no_hazard</code>). <b>Severity underestimation</b> is the share of HIGH-severity hazards rated LOW or MEDIUM.</p>
+
+    <div class="table-wrap">
+      <table class="res">
+        <thead>
+          <tr><th>Method</th><th>Hazard acc. ↑</th><th>Weighted F1 ↑</th><th>Severity acc. ↑</th><th>FNR ↓</th><th>HIGH recall ↑</th><th>Sev. under-est. ↓</th></tr>
+        </thead>
+        <tbody>
+          <tr class="grp"><td colspan="7">Task-specific baselines (zero-shot)</td></tr>
+          <tr><td>SAT (COCO)</td><td>21.43</td><td>11.69</td><td>-</td><td>62.79</td><td>-</td><td>-</td></tr>
+          <tr><td>HazardVLM (DoTA-HEC)</td><td>14.95</td><td>4.09</td><td>-</td><td>99.66</td><td>-</td><td>-</td></tr>
+          <tr><td>DriveLMM-o1</td><td>44.57</td><td>38.95</td><td>28.19</td><td>2.01</td><td>42.50</td><td>56.25</td></tr>
+          <tr class="grp"><td colspan="7">General VLMs (zero-shot)</td></tr>
+          <tr><td>Qwen3-VL-8B</td><td>23.71</td><td>22.32</td><td>21.05</td><td>30.84</td><td>38.75</td><td>41.25</td></tr>
+          <tr><td>GPT-5.4</td><td>44.00</td><td>44.29</td><td>35.90</td><td>13.30</td><td>12.50</td><td>82.50</td></tr>
+          <tr><td>GPT-5.4-mini</td><td>45.24</td><td>45.38</td><td>29.14</td><td>37.54</td><td>3.75</td><td>56.25</td></tr>
+          <tr><td>Claude Sonnet 4.6</td><td>44.10</td><td>40.91</td><td>29.24</td><td><b>0.11</b></td><td>35.00</td><td>65.00</td></tr>
+          <tr class="grp"><td colspan="7">Ours</td></tr>
+          <tr><td>Hazard-Reasoner (SFT only)</td><td>84.48</td><td>84.55</td><td>67.43</td><td>3.80</td><td>41.25</td><td>53.75</td></tr>
+          <tr class="ours"><td>Hazard-Reasoner (SFT + GRPO)</td><td><b>90.33</b></td><td><b>91.24</b></td><td><b>84.81</b></td><td>3.13</td><td><b>72.50</b></td><td><b>25.00</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="res-grid">
+      <div>
+        <h3>Reward ablation</h3>
+        <p class="note">The severity reward drives the safety gains: HIGH recall goes from 40.0% to 71.3% once it is added.</p>
+        <div class="table-wrap">
+          <table class="res compact">
+            <thead><tr><th>Config</th><th>Haz. acc.</th><th>Sev. acc.</th><th>HIGH rec.</th><th>Under-est.</th></tr></thead>
+            <tbody>
+              <tr><td>P1 SFT baseline</td><td>84.48</td><td>67.43</td><td>41.25</td><td>53.75</td></tr>
+              <tr><td>P2 + detection reward</td><td>89.20</td><td>66.80</td><td>40.00</td><td>55.00</td></tr>
+              <tr><td>P3 + severity reward</td><td>89.95</td><td>84.00</td><td>71.25</td><td>26.25</td></tr>
+              <tr class="ours"><td>P4 full GRPO (+ format)</td><td><b>90.33</b></td><td><b>84.81</b></td><td><b>72.50</b></td><td><b>25.00</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <figure class="figure tight">
+        <img src="static/images/grpo_impact.png" alt="Effect of GRPO refinement on safety metrics compared with SFT." loading="lazy">
+        <figcaption>Safety metrics before and after GRPO refinement.</figcaption>
+      </figure>
+    </div>
+
+    <div class="res-grid">
+      <figure class="figure tight">
+        <img src="static/images/per_class_f1.png" alt="Per-class F1 for each hazard type." loading="lazy">
+        <figcaption>Per-class F1 by hazard type.</figcaption>
+      </figure>
+      <figure class="figure tight">
+        <img src="static/images/severity_confusion.png" alt="Severity confusion matrix of Hazard-Reasoner." loading="lazy">
+        <figcaption>Severity confusion matrix of Hazard-Reasoner (SFT + GRPO), row-normalized.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== CITATION ============================== -->
+<section id="citation" class="alt">
+  <div class="wrap narrow">
+    <h2>Citation</h2>
+    <div class="bib">
+      <button class="copy" id="copy-bib" type="button">Copy</button>
+<!-- TODO: update once the paper is published -->
+<pre id="bibtex"><code>@article{hazardreasoner2026,
+  title   = {Hazard-Reasoner: Severity-Aware Traffic Hazard Perception
+             with Vision-Language Models and Safety-Aware
+             Reinforcement Learning},
+  author  = {Xu, Zixuan and others},
+  journal = {Under review},
+  year    = {2026}
+}</code></pre>
+    </div>
+    <p class="note">Please also cite DRAMA if you use the dataset:</p>
+<pre class="bib-small"><code>@inproceedings{malla2023drama,
+  title     = {DRAMA: Joint Risk Localization and Captioning in Driving},
+  author    = {Malla, Srikanth and Choi, Chiho and Dwivedi, Isht and
+               Choi, Joon Hee and Li, Jiachen},
+  booktitle = {WACV},
+  year      = {2023}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <p>Driving frames shown on this page come from the DRAMA dataset (© Honda Research Institute USA) and are used only to illustrate the research.</p>
+  </div>
+</footer>
+
+<script src="static/js/main.js"></script>
+</body>
+</html>

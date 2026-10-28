@@ -1,0 +1,172 @@
+[
+ {
+  "name": "01_crossing_pedestrian_HIGH",
+  "frames": [
+   "static/frames/s_01_t-3.jpg",
+   "static/frames/s_01_t-2.jpg",
+   "static/frames/s_01_t-1.jpg",
+   "static/frames/s_01_t.jpg"
+  ],
+  "gt": {
+   "hazard_type": "crossing_pedestrian",
+   "severity_level": "HIGH",
+   "warning_content": "Be aware of pedestrian crossing ahead",
+   "environment_perception": "A narrow urban street without a center divider runs between low-rise buildings, the pavement is smooth, and there is no moving vehicle traffic. Ahead near the right edge, a man with a backpack carrying a bag crosses mid-block from the right side to the left across the lane, potentially entering the ego vehicle's path. Farther ahead near the center-left, another pedestrian moves diagonally in the roadway toward the left side, occupying part of the lane and constraining speed. Bicycles are parked in recesses along the right frontage but remain outside the travel way.",
+   "hazard_reasoning": "A man carrying a backpack and a bag, crossing the street in the middle of the road from the right side to the left side of the street. The driver should be aware of this unexpected crossing pedestrian in the roadway to prevent a potential collision."
+  },
+  "clip_key": "titan_clip_50_000456_movie"
+ },
+ {
+  "name": "02_stopped_vehicle_LOW",
+  "frames": [
+   "static/frames/s_02_t-3.jpg",
+   "static/frames/s_02_t-2.jpg",
+   "static/frames/s_02_t-1.jpg",
+   "static/frames/s_02_t.jpg"
+  ],
+  "gt": {
+   "hazard_type": "stopped_vehicle",
+   "severity_level": "LOW",
+   "warning_content": "Stop promptly to avoid rear-end collision",
+   "environment_perception": "An urban road under an elevated expressway has two same-direction lanes with railings and a fenced shoulder on the right; the pavement is dry and traffic is slow and queuing. A white van immediately ahead in the ego lane is stopped with its brake lights on because of congestion ahead, holding the ego vehicle in place. The left side splits toward a side street with no vehicles entering, and no oncoming traffic is visible.",
+   "hazard_reasoning": "There is a white van stopped in front of the ego car, because of traffic congestion ahead. The driver should stop promptly to avoid a rear-end collision when vehicles are halted unexpectedly."
+  },
+  "clip_key": "2020-0217-110854_048212_movie"
+ },
+ {
+  "name": "03_road_construction_MEDIUM",
+  "frames": [
+   "static/frames/s_03_t-3.jpg",
+   "static/frames/s_03_t-2.jpg",
+   "static/frames/s_03_t-1.jpg",
+   "static/frames/s_03_t.jpg"
+  ],
+  "gt": {
+   "hazard_type": "road_construction",
+   "severity_level": "MEDIUM",
+   "warning_content": "Be cautious of red cone on right",
+   "environment_perception": "An urban, narrow single-lane street without a median runs between tall buildings; the pavement is clean and traffic is light. A green box truck is stopped at the left curb ahead, partly occupying the lane and constraining the ego vehicle's path. Farther ahead, a small white van in the same direction proceeds straight away from the camera along the lane. The right edge is lined with red cones, including a prominent cone on the right side of the road, which narrows the usable roadway.",
+   "hazard_reasoning": "There is a red cone on the right side of the road. The cone indicates construction and narrows the lane, so the driver should be cautious to avoid collision."
+  },
+  "clip_key": "titan_clip_49_000042_movie"
+ },
+ {
+  "name": "04_motorcyclist_HIGH",
+  "frames": [
+   "static/frames/s_04_t-3.jpg",
+   "static/frames/s_04_t-2.jpg",
+   "static/frames/s_04_t-1.jpg",
+   "static/frames/s_04_t.jpg"
+  ],
+  "gt": {
+   "hazard_type": "motorcyclist",
+   "severity_level": "HIGH",
+   "warning_content": "Be aware of the motorcycle",
+   "environment_perception": "An urban multi-lane arterial with smooth pavement and a painted median carries moderate, steady traffic. Ahead in the ego lane, a black motorcycle moves left across the dashed line into the left lane, briefly affecting the ego vehicle's pace as it merges. Farther ahead in the same lane, a white hatchback continues straight at a steady speed, setting the flow. In the adjacent right lane, a white van and a black taxi proceed forward slightly ahead, remaining parallel to the ego path. A signalized intersection is visible in the distance.",
+   "hazard_reasoning": "There is a black motorcycle lane changing in front of the ego car, from the ego lane to the left lane. The driver should be aware of the motorcycle's maneuver to maintain a safe following distance and avoid a potential collision."
+  },
+  "clip_key": "2020-0131-135401_050918_movie"
+ },
+ {
+  "name": "05_deceleration_vehicle_MEDIUM",
+  "frames": [
+   "static/frames/s_05_t-3.jpg",
+   "static/frames/s_05_t-2.jpg",
+   "static/frames/s_05_t-1.jpg",
+   "static/frames/s_05_t.jpg"
+  ],
+  "gt": {
+   "hazard_type": "deceleration_vehicle",
+   "severity_level": "MEDIUM",
+   "warning_content": "Be aware of slowing minivan ahead",
+   "environment_perception": "An urban two-lane arterial runs under an elevated roadway with no median, flanked by guardrails; the pavement is smooth and traffic moves at a moderate pace. A large box truck ahead in the ego lane proceeds steadily and sets the pace for the ego vehicle. To the right, a silver minivan in the adjacent lane slows alongside the truck, reducing the space for overtaking. Farther ahead in the right lane, a white car continues away from the others, opening a gap.",
+   "hazard_reasoning": "There is a silver minivan slowing in the right lane. Its reduced speed could require you to decelerate or maneuver unexpectedly, so stay alert and maintain a safe following distance."
+  },
+  "clip_key": "2020-0203-154554_037587_movie"
+ },
+ {
+  "name": "06_oncoming_vehicle_MEDIUM",
+  "frames": [
+   "static/frames/s_06_t-3.jpg",
+   "static/frames/s_06_t-2.jpg",
+   "static/frames/s_06_t-1.jpg",
+   "static/frames/s_06_t.jpg"
+  ],
+  "gt": {
+   "hazard_type": "oncoming_vehicle",
+   "severity_level": "MEDIUM",
+   "warning_content": "Carefully manoeuvre around white truck",
+   "environment_perception": "The scene shows an urban two-way roadway with one lane in each direction and a gentle left curve, marked by double yellow center lines. The pavement is dry and unobstructed, but the left side has a coned-off work area with a large crane truck encroaching on and narrowing the ego lane. A city bus is stopped at the curb on the right in the opposite direction, and a white truck is visible farther ahead in the right oncoming lane as the ego vehicle continues past the roadside obstruction.",
+   "hazard_reasoning": "The key risk is the white truck traveling toward the ego vehicle in the opposing lane. Since the ego car is still proceeding through the narrowed lane after the obstruction, the driver needs to keep clear of the approaching truck and maneuver cautiously to avoid a collision."
+  },
+  "clip_key": "2020-0203-114632_005546_movie"
+ },
+ {
+  "name": "07_parked_vehicle_MEDIUM",
+  "frames": [
+   "static/frames/s_07_t-3.jpg",
+   "static/frames/s_07_t-2.jpg",
+   "static/frames/s_07_t-1.jpg",
+   "static/frames/s_07_t.jpg"
+  ],
+  "gt": {
+   "hazard_type": "parked_vehicle",
+   "severity_level": "MEDIUM",
+   "warning_content": "Manoeuvre around the parked truck carefully.",
+   "environment_perception": "An urban two-way street with one narrow lane per direction runs between mid-rise buildings; the pavement is smooth and traffic is light. Immediately ahead on the left, a gray box truck is parked with its rear doors open and tail lift extended, protruding into the ego lane and constraining the approach. Far ahead in the opposite lane, an oncoming car proceeds straight. Another vehicle sits along the right curb further ahead, leaving a narrow passage between the parked truck and the curbside obstruction.",
+   "hazard_reasoning": "There is a gray truck parked on the left side of the road. The parked truck blocks part of the left lane and reduces visibility ahead, so manoeuvre around it carefully."
+  },
+  "clip_key": "titan_clip_1053_000054_movie"
+ },
+ {
+  "name": "08_roadside_pedestrian_MEDIUM",
+  "frames": [
+   "static/frames/s_08_t-3.jpg",
+   "static/frames/s_08_t-2.jpg",
+   "static/frames/s_08_t-1.jpg",
+   "static/frames/s_08_t.jpg"
+  ],
+  "gt": {
+   "hazard_type": "roadside_pedestrian",
+   "severity_level": "MEDIUM",
+   "warning_content": "Be aware of pedestrian pushing trolley",
+   "environment_perception": "An urban neighborhood street with a narrow two-way carriageway and no median, smooth pavement, and light traffic. The ego vehicle proceeds along the left side with no oncoming cars visible. Ahead on the right, a pedestrian in a white shirt and brown pants pushes a trolley along the curb, moving away from the ego car and staying near the edge of the roadway. A blue pedestrian sign stands on the right, and a small cart and potted plants line the left sidewalk, slightly narrowing the usable lane.",
+   "hazard_reasoning": "There is a pedestrian wearing a white shirt and brown pants, pushing a trolley, walking on the right side of the road, away from the ego car. The driver should be aware of the pedestrian as they may step into the lane unexpectedly."
+  },
+  "clip_key": "titan_clip_793_000282_movie"
+ },
+ {
+  "name": "09_lane_change_merge_MEDIUM",
+  "frames": [
+   "static/frames/s_09_t-3.jpg",
+   "static/frames/s_09_t-2.jpg",
+   "static/frames/s_09_t-1.jpg",
+   "static/frames/s_09_t.jpg"
+  ],
+  "gt": {
+   "hazard_type": "lane_change_merge",
+   "severity_level": "MEDIUM",
+   "warning_content": "Yield to merging vehicle",
+   "environment_perception": "An urban multi-lane arterial runs beneath an elevated expressway, with three same-direction lanes, smooth pavement, and heavy slow traffic. A gray minivan ahead on the left moves right and merges into the ego lane because congestion builds ahead. Directly ahead, a flatbed truck in the ego lane creeps forward and constrains the ego vehicle's pace. A white microvan slightly ahead to the right continues in the rightmost lane at a similar speed without merging. Overhead blue direction signs hang above the roadway.",
+   "hazard_reasoning": "There is a gray mini-van changing lanes, from the left lane to the ego lane, because of traffic congestion ahead. Yield to the merging vehicle to prevent a collision as it enters your path."
+  },
+  "clip_key": "2020-0203-154554_030183_movie"
+ },
+ {
+  "name": "10_making_turn_vehicle_MEDIUM",
+  "frames": [
+   "static/frames/s_10_t-3.jpg",
+   "static/frames/s_10_t-2.jpg",
+   "static/frames/s_10_t-1.jpg",
+   "static/frames/s_10_t.jpg"
+  ],
+  "gt": {
+   "hazard_type": "making_turn_vehicle",
+   "severity_level": "MEDIUM",
+   "warning_content": "Yield to the turning bus",
+   "environment_perception": "An urban multi-lane intersection with painted channelization and smooth, dry pavement is ahead, and traffic appears light to moderate. A stripy tour bus turns across the ego lane from the right in the middle of the intersection, temporarily blocking the path as it completes the maneuver. A small boxy car on the far right edges forward toward the junction at low speed, staying in its lane and clear of the bus. A few vehicles continue straight beyond the intersection with no immediate effect on the ego vehicle. Strong sun glare from the upper left casts long shadows across the roadway.",
+   "hazard_reasoning": "There is a stripy bus turning across the ego lane, front the right side of the road, in the middle of an intersection. The bus is crossing into your path unexpectedly, so you should yield to avoid a collision."
+  },
+  "clip_key": "2020-0218-151547_007777_movie"
+ }
+]
