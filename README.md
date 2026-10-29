@@ -1,25 +1,23 @@
 # hazard-reasoner.github.io
 
-Project page for **Hazard-Reasoner** and the **DRAMA-Reasoning** dataset.
+Project page for **Hazard-Reasoner** and the **DRAMA-Reasoning** annotations.
+Live at <https://hazard-reasoner.github.io>.
 
 ```
-index.html              single-page site (no build step)
-static/css, static/js   styles + frame player / charts / demo
-static/images           paper figures
-static/frames           demo frames (resized, from DRAMA)
-static/data             stats.json, samples.json, demos.json
-dataset/                annotation release (jsonl) + README
-tools/build_assets.py   regenerates static/data, static/frames, dataset/ from the project files
+index.html               the page (no build step; tabs: Dataset, Download, Method & results, Demo)
+static/css, static/js    styles and page logic
+static/data/site-data.js dataset stats, class examples and demo outputs (generated)
+static/scenes/           example frames + animated previews (DRAMA, © Honda Research Institute USA; illustration only)
+static/images/           paper figures and the project icon
+dataset/                 annotation release (jsonl, no images) + README
+tools/build_assets.py    regenerates static/data, static/scenes and dataset/ from the project files
 ```
 
-Local preview (`fetch` does not work from `file://`):
+Local preview:
 
 ```bash
-python -m http.server 8000   # open http://localhost:8000
+python -m http.server 8000   # then open http://localhost:8000
 ```
 
-Regenerate assets after changing data or figures:
-
-```bash
-python tools/build_assets.py
-```
+Driving frames belong to the DRAMA dataset (Honda Research Institute USA) and are not redistributed
+as part of DRAMA-Reasoning. Request DRAMA at <https://usa.honda-ri.com/drama>.

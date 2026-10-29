@@ -12,7 +12,7 @@ Annotations for **Hazard-Reasoner**: 12,522 ego-view driving scenes from [DRAMA]
 
 ## Images
 
-**Images are not included.** The frames come from DRAMA, which Honda Research Institute USA distributes under its own research license. Request access at <https://usa.honda-ri.com/drama>.
+**Images are not included** (DRAMA video and frames © Honda Research Institute USA; distributed only by HRI). Request DRAMA access from Honda Research Institute at <https://usa.honda-ri.com/drama> (university email required; non-commercial research use).
 
 Each sample uses 4 sequential front-camera frames, `t-3, t-2, t-1, t`, spaced 0.5 s apart and ending at the annotated DRAMA frame. The `source` field identifies the DRAMA clip:
 
